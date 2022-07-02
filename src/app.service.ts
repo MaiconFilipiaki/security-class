@@ -11,6 +11,10 @@ export class AppService {
     private readonly repo: Repository<PeopleModel>,
   ) {}
 
+  async getAll() {
+    return this.repo.find();
+  }
+
   async createPeople(createPeople: CreatePeopleDTO) {
     if (
       !createPeople.email.includes('@') ||

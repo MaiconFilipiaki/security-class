@@ -12,8 +12,16 @@ export class AppController {
 
   @Get()
   @Render('index')
-  getHello(): message {
-    return { message: 'Hello world!' };
+  async getHello() {
+    const dados = await this.appService.getAll();
+    const dadosIndex = dados.map((i, index) => {
+      return {
+        row: index + 1,
+        ...i,
+        professionalExperience: `${i.professionalExperience.slice(0, 50)}....`,
+      };
+    });
+    return { dadosIndex };
   }
 
   @Get('/register')

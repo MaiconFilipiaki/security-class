@@ -3,14 +3,14 @@
     <form id="register-form" class="row g-3 needs-validation" novalidate>
         <div class="col-md-4">
             <label for="validationCustom01" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="validationCustom01" required>
+            <input name="name" type="text" class="form-control" id="validationCustom01" required>
             <div class="valid-feedback">
             Looks good!
             </div>
         </div>
         <div class="col-md-4">
             <label for="validationCustom02" class="form-label">Telefone</label>
-            <input type="number" class="form-control" id="validationCustom02" required>
+            <input name="phone" type="number" class="form-control" id="validationCustom02" required>
             <div class="valid-feedback">
             Looks good!
             </div>
@@ -19,7 +19,7 @@
             <label for="validationCustomUsername" class="form-label">Email</label>
             <div class="input-group has-validation">
             <span class="input-group-text" id="inputGroupPrepend">@</span>
-            <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
+            <input name="email" type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
             <div class="invalid-feedback">
                 Please choose a username.
             </div>
@@ -27,14 +27,17 @@
         </div>
         <div class="col-md-6">
             <label for="validationCustom03" class="form-label">WebSite</label>
-            <input type="text" class="form-control" id="validationCustom03" required>
+            <input name="website" type="text" class="form-control" id="validationCustom03" required>
             <div class="invalid-feedback">
             Please provide a valid city.
             </div>
         </div>
         <div class="col-md-6">
                 <label for="exampleFormControlTextarea1" class="form-label">Experiencia profissional</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea name="professionalExperience"  class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+        <div id="alert-msg" class="alert" role="alert">
+            <span id="span-erros"></span>
         </div>
         <div class="col-12">
             <button id="btn-submit" class="btn btn-primary" type="submit">Submit form</button>
@@ -44,8 +47,30 @@
       var form = document.getElementById("register-form")
       form.addEventListener("submit", event => {
         event.preventDefault()
-        console.log('event', event)
-      })
+        const formData = new FormData(event.target);
+        const formProps = Object.fromEntries(formData);
+        const url = new URL(window.location.href)
+        fetch(`${url.origin}/create`, {
+            method: "POST",
+            body: JSON.stringify(formProps),
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+        })
+            .then(response => response.json()) 
+            .then(json => {
+                if (json.statusCode !== 201) {
+                    throw new Error(json.message)
+                }
+                console.log(json)
+            })
+            .catch(err => {
+                console.log('OPA', err)
+                const msg = err[0]
+                const elementAlert = document.getElementById("alert-msg")
+                console.log(elementAlert)
+                elementAlert.classList.add("alert-danger")
+                document.getElementById('span-erros').textContent=err
+            });
+        })
     </script>
   {{/inline}}
 {{/layout}}

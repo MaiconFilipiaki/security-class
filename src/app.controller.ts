@@ -1,6 +1,6 @@
+import { CreatePeopleDTO } from './create-people';
 import { Body, Controller, Get, Post, Render } from '@nestjs/common';
 import { AppService } from './app.service';
-import { CreatePeople } from './create-people';
 
 interface message {
   message: string;
@@ -16,6 +16,14 @@ export class AppController {
     return { message: 'Hello world!' };
   }
 
-  @Post()
-  registerPeople(@Body() createPeople: CreatePeople) {}
+  @Get('/register')
+  @Render('register')
+  loadingRegister() {
+    return { message: 'Hello world!' };
+  }
+
+  @Post('/create')
+  registerPeople(@Body() createPeople: CreatePeopleDTO) {
+    return this.appService.createPeople(createPeople);
+  }
 }

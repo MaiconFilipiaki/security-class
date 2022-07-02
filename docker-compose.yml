@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres
+    container_name: architecture-db
+    tty: true
+    environment:
+      - POSTGRES_DB=architecture
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    ports:
+      - '5432:5432'
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: architecture-pgadmin
+    tty: true
+    environment:
+      - PGADMIN_DEFAULT_HOST=db
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=123456
+    ports:
+      - '9000:80'
+    depends_on:
+      - db

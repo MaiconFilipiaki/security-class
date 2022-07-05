@@ -1,6 +1,15 @@
 import { CreatePeopleDTO } from './create-people';
-import { Body, Controller, Get, Post, Render } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Render,
+} from '@nestjs/common';
 import { AppService } from './app.service';
+import PeopleModel from './models/people';
 
 interface message {
   message: string;
@@ -26,11 +35,16 @@ export class AppController {
 
   @Get('/register')
   @Render('register')
-  loadingRegister() {
-    return { message: 'Hello world!' };
+  loadingRegister(@Query('id') id) {
+    const idConvert = parseInt(id);
+    if (idConvert && idConvert !== NaN) {
+      const people = this.appService.getById(idConvert);
+      return people;
+    }
+    return new PeopleModel();
   }
 
-  @Post('/create')
+  @Post('/save')
   registerPeople(@Body() createPeople: CreatePeopleDTO) {
     return this.appService.createPeople(createPeople);
   }

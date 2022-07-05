@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { isNumber } from 'class-validator';
 import { Repository } from 'typeorm';
 import { CreatePeopleDTO } from './create-people';
 import PeopleModel from './models/people';
@@ -10,6 +11,14 @@ export class AppService {
     @InjectRepository(PeopleModel)
     private readonly repo: Repository<PeopleModel>,
   ) {}
+
+  async getById(id: number) {
+    return await this.repo.findOne({
+      where: {
+        id: id,
+      },
+    });
+  }
 
   async getAll() {
     return this.repo.find();
@@ -60,6 +69,20 @@ export class AppService {
       createPeople.website,
       createPeople.professionalExperience,
     );
+    if (createPeople.id && isNumber(createPeople.id)) {
+      // const idString = createPeople.id.toString();
+      const user = await this.getById(createPeople.id);
+      if (!user) {
+        throw new HttpException(
+          {
+            status: HttpStatus.UNPROCESSABLE_ENTITY,
+            error: 'User not found',
+          },
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+      return this.repo.update({ id: user.id }, newPeople);
+    }
     return this.repo.save(newPeople);
   }
 }

@@ -16,8 +16,8 @@ export default class PeopleModel {
     this.professionalExperience = professionalExperience;
   }
 
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('rowid')
+  id: number;
 
   @Column({ type: 'varchar' })
   name: string;

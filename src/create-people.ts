@@ -1,6 +1,17 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsEmpty,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreatePeopleDTO {
+  @IsNumber()
+  @IsOptional()
+  id?: number;
+
   @IsString()
   @IsNotEmpty()
   name: string;

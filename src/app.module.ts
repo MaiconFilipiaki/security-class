@@ -1,10 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import PeopleModel from './models/people';
+import { ValidateCustomerMiddleware } from './validate-middleware';
 
 @Module({
   imports: [
@@ -23,4 +24,8 @@ import PeopleModel from './models/people';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ValidateCustomerMiddleware).forRoutes('*');
+  }
+}

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { isNumber } from 'class-validator';
 import { Repository } from 'typeorm';
@@ -27,7 +27,7 @@ export class AppService {
   async createPeople(createPeople: CreatePeopleDTO) {
     if (
       !createPeople.email.includes('@') ||
-      !createPeople.email.includes('.com')
+      !createPeople.email.includes('.COM')
     ) {
       throw new HttpException(
         {
@@ -38,8 +38,8 @@ export class AppService {
       );
     }
     if (
-      !createPeople.website.includes('.com') ||
-      !createPeople.website.includes('www')
+      !createPeople.website.includes('.COM') ||
+      !createPeople.website.includes('WWW')
     ) {
       throw new HttpException(
         {

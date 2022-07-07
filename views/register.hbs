@@ -69,8 +69,15 @@
         })
             .then(response => response.json()) 
             .then(json => {
-                if (json.status) {
-                    throw new Error(json.message)
+                console.log(json)
+                if (json.status ||json.statusCode) {
+                    if (json.message) {
+                        throw new Error(json.message)
+                    } 
+                    if (json.error) {
+                        throw new Error(json.error)
+                    }
+                    
                 }
                 const elementAlert = document.getElementById("alert-msg-success")
                 elementAlert.classList.add("alert-success")
